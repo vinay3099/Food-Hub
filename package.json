@@ -1,0 +1,30 @@
+{
+  "name": "foodhub",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vinay Sai",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-messages": "^1.0.1",
+    "express-session": "^1.17.1",
+    "express-validator": "^5.3.1",
+    "mongoose": "^5.10.5"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinay3099/Food-Hub.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vinay3099/Food-Hub/issues"
+  },
+  "homepage": "https://github.com/vinay3099/Food-Hub#readme",
+  "description": ""
+}
