@@ -7,7 +7,8 @@ var session = require('express-session');
 var expressValidator = require('express-validator');
 //db connection
 mongoose.connect(config.db, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -19,8 +20,11 @@ var app = express();
 //view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-//set public folders
+//set public folder
 app.use(express.static(path.join(__dirname, "public")));
+
+//set global errors variable
+app.locals.errors = null;
 
 //Body Parser middleware
 

@@ -20,11 +20,11 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vinay3099/Food-Hub.git"
+    "url": "git+https://github.com/vinay3099/INT222CA-Food-Hub.git"
   },
   "bugs": {
-    "url": "https://github.com/vinay3099/Food-Hub/issues"
+    "url": "https://github.com/vinay3099/INT222CA-Food-Hub.git"
   },
-  "homepage": "https://github.com/vinay3099/Food-Hub#readme",
+  "homepage": "https://github.com/vinay3099/INT222CA-Food-Hub.git#readme",
   "description": ""
 }
