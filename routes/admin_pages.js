@@ -112,9 +112,9 @@ router.post("/reorder-pages", function (req, res, next) {
 });
 
 //GET edit page
-router.get("/edit-page/:slug", function (req, res, next) {
+router.get("/edit-page/:id", function (req, res, next) {
     
-  Page.findOne({slug: req.params.slug}, function(err,page){
+  Page.findById( req.params.id, function(err,page){
         if(err){
             return console.log(err);
         }
@@ -132,7 +132,7 @@ router.get("/edit-page/:slug", function (req, res, next) {
  });
 
  // POST edit-page 
-router.post("/edit-page/:slug", function (req, res) {
+router.post("/edit-page/:id", function (req, res) {
    
     req.checkBody('title', 'Title must have a value').notEmpty();
     req.checkBody('content', 'Content must have a value').notEmpty();
@@ -140,7 +140,7 @@ router.post("/edit-page/:slug", function (req, res) {
    var slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
    if(slug == "") slug = title.replace(/\s+/g, '-').toLowerCase();
    var content = req.body.content;
-   var id = req.body.id;
+   var id = req.params.id;
    
    var errors = req.validationErrors();
 
@@ -180,7 +180,7 @@ router.post("/edit-page/:slug", function (req, res) {
                         return console.log(err);
         
                         req.flash('success','Page added');
-                        res.redirect('/admin/pages/edit-page/'+page.slug);
+                        res.redirect('/admin/pages/edit-page/'+id);
     
                     });   
                });

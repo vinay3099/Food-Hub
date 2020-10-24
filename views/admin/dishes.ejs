@@ -1,0 +1,49 @@
+<%- include('../_layouts/adminheader.ejs') %>
+
+
+<h2 class="page-title">Dishes</h2>
+<a href ="/admin/dishes/add-dish" class ="btn btn-primary">Add a new dish</a>
+<br><br>
+<% if(count >0){ %>
+
+
+<table class="table table-striped  sorting">
+    <thead>
+        <tr>
+            <th>Dish</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Dish Image</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% dishes.forEach(function(dish){ %>
+         <tr>
+             <td><%= dish.title %></td>
+             <td>₹<%= parseFloat(dish.price).toFixed(2) %></td>
+             <td><%= dish.category %></td>
+             <td>
+                 <% if(dish.image ==""){ %>
+                  <img  id="noimage"src="/images/1.jpg" alt=""/>
+                 <% } else{  %>
+                    <img id="noimage" src="/dish_images/<%= dish._id %>/<%=dish.image%>">
+                    <% } %>
+             </td>
+             <td><a href="/admin/dishes/edit-dish/<%= dish._id %>">Edit</a></td>
+        
+                <td><a class="confirmDeletion" href="/admin/dishes/delete-dish/<%= dish._id %>">Delete</a></td>
+             
+         </tr>
+       <% }); %>
+    </tbody>
+
+</table>
+<%} else{ %>
+  <h3 class="text-center">There are no dishes</h3>  
+
+<%} %>
+
+
+<%- include('../_layouts/adminfooter.ejs') %>

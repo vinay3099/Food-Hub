@@ -5,6 +5,7 @@ var config = require('./config/db');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var expressValidator = require('express-validator');
+var fileUpload = require('express-fileupload');
 //db connection
 mongoose.connect(config.db, {
     useNewUrlParser: true,
@@ -25,6 +26,16 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //set global errors variable
 app.locals.errors = null;
+
+//Get page Model
+var page = require('./models/page');
+
+//Get all pages to pass to header.ejs
+
+
+// Express fileupload middleware
+app.use(fileUpload());
+
 
 //Body Parser middleware
 
@@ -57,6 +68,24 @@ app.use(expressValidator({
            value : value
         };
 
+    },
+    customValidators:{
+        isImage: function(value,filename){
+            var extension = (path.extname(filename)).toLowerCase();
+            switch(extension){
+                    case '.jpg':
+                    return ".jpg";
+                    case '.jpeg':
+                    return ".jpeg";
+                    case '.png':
+                    return ".png";
+                    case '':
+                    return ".jpg";  
+                    default :
+                    return false;
+            }
+            
+        }
     }
 }));
 
@@ -72,9 +101,18 @@ app.use(function (req, res, next) {
 //set routes
 var pages = require('./routes/pages.js');
 var adminPages = require('./routes/admin_pages.js');
+var adminCategories = require('./routes/admin_categories.js');
+var adminDishes= require('./routes/admin_dishes.js');
+
+
 const { validationResult } = require("express-validator");
+
  app.use('/admin/pages',adminPages );
+ app.use('/admin/categories',adminCategories);
+ app.use('/admin/dishes',adminDishes)
  app.use('/',pages);
+
+ //server
 var port = 3000;
 app.listen(port, function () {
     console.log("server started on port" + port);
