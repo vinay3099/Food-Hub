@@ -6,16 +6,19 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var expressValidator = require('express-validator');
 var fileUpload = require('express-fileupload');
+
 //db connection
 mongoose.connect(config.db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+   
+    useMongoClient: true
 });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
     console.log("connected to mongodb");
 });
+
+mongoose.Promise = require('bluebird');
 
 var app = express();
 //view engine setup
@@ -28,10 +31,28 @@ app.use(express.static(path.join(__dirname, "public")));
 app.locals.errors = null;
 
 //Get page Model
-var page = require('./models/page');
+var Page = require('./models/page');
 
 //Get all pages to pass to header.ejs
+ Page.find({}).sort({sorting: 1}).exec(function (err, pages) {
+    if (err) {
+        console.log(err);
+    } else {
+        app.locals.pages = pages;
+    }
+});
 
+// Get Category Model
+var Category = require('./models/category');
+
+// Get all categories to pass to header.ejs
+Category.find(function (err, categories) {
+    if (err) {
+        console.log(err);
+    } else {
+        app.locals.categories = categories;
+    }
+});
 
 // Express fileupload middleware
 app.use(fileUpload());
@@ -98,11 +119,22 @@ app.use(function (req, res, next) {
 });
 
 
+app.get('*', function(req,res,next) {
+    res.locals.cart = req.session.cart;
+    //res.locals.user = req.user || null;
+    next();
+ });
+
+
 //set routes
 var pages = require('./routes/pages.js');
+var dishes = require('./routes/dishes.js');
+var cart = require('./routes/cart.js');
 var adminPages = require('./routes/admin_pages.js');
 var adminCategories = require('./routes/admin_categories.js');
 var adminDishes= require('./routes/admin_dishes.js');
+
+
 
 
 const { validationResult } = require("express-validator");
@@ -110,6 +142,8 @@ const { validationResult } = require("express-validator");
  app.use('/admin/pages',adminPages );
  app.use('/admin/categories',adminCategories);
  app.use('/admin/dishes',adminDishes)
+ app.use('/dishes',dishes);
+ app.use('/cart', cart);
  app.use('/',pages);
 
  //server
