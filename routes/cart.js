@@ -120,9 +120,9 @@ router.get('/clear', function (req, res) {
 });
 
 /*
- * GET buy now
+ * GET order now
  */
-router.get('/buynow', function (req, res) {
+router.get('/ordernow', function (req, res) {
 
     delete req.session.cart;
     

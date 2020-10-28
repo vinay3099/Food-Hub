@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var expressValidator = require('express-validator');
 var fileUpload = require('express-fileupload');
+var passport = require('passport');
 
 //db connection
 mongoose.connect(config.db, {
@@ -118,10 +119,16 @@ app.use(function (req, res, next) {
   next();
 });
 
+// Passport Config
+require('./config/passport')(passport);
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.get('*', function(req,res,next) {
     res.locals.cart = req.session.cart;
-    //res.locals.user = req.user || null;
+    res.locals.user = req.user || null;
     next();
  });
 
@@ -130,6 +137,7 @@ app.get('*', function(req,res,next) {
 var pages = require('./routes/pages.js');
 var dishes = require('./routes/dishes.js');
 var cart = require('./routes/cart.js');
+var users = require('./routes/users.js');
 var adminPages = require('./routes/admin_pages.js');
 var adminCategories = require('./routes/admin_categories.js');
 var adminDishes= require('./routes/admin_dishes.js');
@@ -144,6 +152,7 @@ const { validationResult } = require("express-validator");
  app.use('/admin/dishes',adminDishes)
  app.use('/dishes',dishes);
  app.use('/cart', cart);
+ app.use('/users', users);
  app.use('/',pages);
 
  //server
