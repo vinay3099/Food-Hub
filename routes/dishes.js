@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs-extra');
-// var auth = require('../config/auth');
-// var isUser = auth.isUser;
+ var auth = require('../config/auth');
+var isUser = auth.isUser;
 
 // Get Product model
 var Dish = require('../models/dish');
@@ -13,8 +13,7 @@ var Category = require('../models/category');
 /*
  * GET all dishes
  */
-router.get('/', function (req, res) {
-//router.get('/', isUser, function (req, res) {
+router.get('/', isUser, function (req, res) {
 
     Dish.find(function (err, dishes) {
         if (err)
@@ -32,7 +31,7 @@ router.get('/', function (req, res) {
 /*
  * GET dishes by category
  */
-router.get('/:category', function (req, res) {
+router.get('/:category',isUser, function (req, res) {
 
     var categorySlug = req.params.category;
 
@@ -53,7 +52,7 @@ router.get('/:category', function (req, res) {
 /*
  * GET product details
  */
-router.get('/:category/:dish', function (req, res) {
+router.get('/:category/:dish',isUser, function (req, res) {
 
     var galleryImages = null;
     //  var loggedIn = (req.isAuthenticated()) ? true : false;

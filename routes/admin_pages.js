@@ -2,12 +2,14 @@ const { render } = require('ejs');
 const { Router } = require('express');
 var express = require('express');
 var router = express.Router();
+var auth = require('../config/auth');
+var isAdmin = auth.isAdmin;
 
 //Get page model
 var Page = require('../models/page');
 
 // GET Pages index
-router.get("/", function (req, res, next) {
+router.get("/",isAdmin, function (req, res, next) {
     Page.find({}).sort({sorting:1}).exec(function(err,pages){
         res.render('admin/pages',{
             pages:pages
@@ -16,7 +18,7 @@ router.get("/", function (req, res, next) {
 });
 
 // GET add-page 
-router.get("/add-page", function (req, res, next) {
+router.get("/add-page",isAdmin,  function (req, res, next) {
    var title ="";
    var slug ="";
    var content ="";
@@ -137,7 +139,7 @@ router.post('/reorder-pages', function (req, res) {
 
 
 //GET edit page
-router.get("/edit-page/:id", function (req, res, next) {
+router.get("/edit-page/:id",isAdmin,  function (req, res, next) {
     
   Page.findById( req.params.id, function(err,page){
         if(err){
@@ -157,7 +159,7 @@ router.get("/edit-page/:id", function (req, res, next) {
  });
 
  // POST edit-page 
-router.post("/edit-page/:id", function (req, res) {
+router.post("/edit-page/:id",  function (req, res) {
    
     req.checkBody('title', 'Title must have a value').notEmpty();
     req.checkBody('content', 'Content must have a value').notEmpty();
@@ -225,7 +227,7 @@ router.post("/edit-page/:id", function (req, res) {
 });
 
 // GET delete  page
-router.get("/delete-page/:id", function (req, res, next) {
+router.get("/delete-page/:id",isAdmin,  function (req, res, next) {
     Page.findByIdAndRemove(req.params.id,function(err){
         if(err) return console.log(err);
         Page.find({}).sort({sorting: 1}).exec(function (err, pages) {

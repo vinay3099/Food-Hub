@@ -2,12 +2,14 @@ const { render } = require('ejs');
 const { Router } = require('express');
 var express = require('express');
 var router = express.Router();
+var auth = require('../config/auth');
+var isAdmin = auth.isAdmin;
 
 //Get Category  model
 var  Category  = require('../models/category');
 
 // GET  Category  index
-router.get("/", function (req, res, next) {
+router.get("/", isAdmin, function (req, res, next) {
    Category.find(function(err,categories){ 
        if(err) return console.log(err);
         res.render('admin/categories',{
@@ -17,7 +19,7 @@ router.get("/", function (req, res, next) {
 });
 
 // GET add- Category 
-router.get("/add-category", function (req, res, next) {
+router.get("/add-category",isAdmin, function (req, res, next) {
    var title ="";
 
 
@@ -90,32 +92,9 @@ router.post("/add-category", function (req, res) {
    
 });
 
-// //Post reorder pages
-// router.post("/reorder-pages", function (req, res, next) {
-    
-//     var ids= req.body['id[]'];
-
-//     var count =0;
-//     for(var i =0; i<ids.length; i++){
-//         var id = ids[i];
-//         count++;
-//         (function(count){ 
-//         Page.findById(id,function(err,page){
-//            page.sorting = count;
-
-//            page.save(function(err){
-
-//            if(err) return console.log(err);
-
-
-//            });
-//         });
-//     })(count);
-//     }
-// });
 
 //GET edit page
-router.get("/edit-category/:id", function (req, res, next) {
+router.get("/edit-category/:id",isAdmin, function (req, res, next) {
     
     Category.findById(req.params.id, function(err,category){
         if(err){
@@ -195,7 +174,7 @@ router.post("/edit-category/:id", function (req, res) {
 });
 
 // GET delete  category
-router.get("/delete-category/:id", function (req, res, next) {
+router.get("/delete-category/:id",isAdmin, function (req, res, next) {
     Category.findByIdAndRemove(req.params.id,function(err){
         if(err) return console.log(err);
 

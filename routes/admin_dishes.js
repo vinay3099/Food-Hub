@@ -5,6 +5,8 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs-extra');
 var resizeImg = require('resize-img');
+var auth = require('../config/auth');
+var isAdmin = auth.isAdmin;
 
 //Get dish model
 var Dish = require('../models/dish');
@@ -13,7 +15,7 @@ var Dish = require('../models/dish');
 var  Category = require('../models/category');
 
 // GET dishes index
-router.get("/", function (req, res, next) {
+router.get("/",isAdmin, function (req, res, next) {
     var count;
     Dish.count(function(err,c){
        count = c;
@@ -28,7 +30,7 @@ router.get("/", function (req, res, next) {
 });
 
 // GET add-dish
-router.get("/add-dish", function (req, res, next) {
+router.get("/add-dish",isAdmin, function (req, res, next) {
    var title ="";
    var desc ="";
    var price ="";
@@ -143,7 +145,7 @@ var imageFile = typeof req.files.image !== "undefined"? req.files.image.name : "
 
 
 //GET edit dish
-router.get('/edit-dish/:id',  function (req, res) {
+router.get('/edit-dish/:id', isAdmin, function (req, res) {
 
     var errors;
 
@@ -286,7 +288,7 @@ router.post("/dish-gallery/:id", function (req, res, next) {
 
 
 // GET delete  image
-router.get('/delete-image/:image',  function (req, res) {
+router.get('/delete-image/:image', isAdmin, function (req, res) {
 
     var originalImage = 'public/dish_images/' + req.query.id + '/gallery/' + req.params.image;
     var thumbImage = 'public/dish_images/' + req.query.id + '/gallery/thumbs/' + req.params.image;
@@ -308,7 +310,7 @@ router.get('/delete-image/:image',  function (req, res) {
 });
 
 //get  delete dish
-router.get('/delete-dish/:id', function (req, res) {
+router.get('/delete-dish/:id', isAdmin,function (req, res) {
 
     var id = req.params.id;
     var path = 'public/dish_images/' + id;
