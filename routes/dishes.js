@@ -13,7 +13,7 @@ var Category = require('../models/category');
 /*
  * GET all dishes
  */
-router.get('/', isUser, function (req, res) {
+router.get('/',  function (req, res) {
 
     Dish.find(function (err, dishes) {
         if (err)
@@ -31,7 +31,7 @@ router.get('/', isUser, function (req, res) {
 /*
  * GET dishes by category
  */
-router.get('/:category',isUser, function (req, res) {
+router.get('/:category', function (req, res) {
 
     var categorySlug = req.params.category;
 

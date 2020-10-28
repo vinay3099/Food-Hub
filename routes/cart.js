@@ -3,11 +3,14 @@ var router = express.Router();
 
 // Get Product model
 var Dish = require('../models/dish');
+var auth = require('../config/auth');
+var isUser = auth.isUser;
+
 
 /*
  * GET add dish to cart
  */
-router.get('/add/:dish', function (req, res) {
+router.get('/add/:dish',isUser, function (req, res) {
 
     var slug = req.params.dish;
 
@@ -55,7 +58,7 @@ router.get('/add/:dish', function (req, res) {
 /*
  * GET checkout page
  */
-router.get('/checkout', function (req, res) {
+router.get('/checkout',isUser, function (req, res) {
 
     if (req.session.cart && req.session.cart.length == 0) {
         delete req.session.cart;
@@ -72,7 +75,7 @@ router.get('/checkout', function (req, res) {
 /*
  * GET update product
  */
-router.get('/update/:product', function (req, res) {
+router.get('/update/:product',isUser, function (req, res) {
 
     var slug = req.params.product;
     var cart = req.session.cart;
@@ -110,7 +113,7 @@ router.get('/update/:product', function (req, res) {
 /*
  * GET clear cart
  */
-router.get('/clear', function (req, res) {
+router.get('/clear',isUser, function (req, res) {
 
     delete req.session.cart;
     
@@ -126,7 +129,9 @@ router.get('/ordernow', function (req, res) {
 
     delete req.session.cart;
     
-    res.sendStatus(200);
+    //res.sendStatus(200);
+    req.flash('success', 'Order Received!');
+    res.redirect('/cart/checkout');
 
 });
 
